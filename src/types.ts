@@ -1,4 +1,4 @@
-import type { PrefixedUnion } from '@niche-works/types';
+import type { PrefixedUnion } from '@fringeworks/types';
 import type { CSSProperties } from 'react';
 
 /**

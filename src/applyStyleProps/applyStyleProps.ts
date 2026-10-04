@@ -1,5 +1,5 @@
-import { styleProxy } from '@niche-works/react-style-proxy';
-import type { LooseDictionary } from '@niche-works/types';
+import { styleProxy } from '@fringeworks/react-style-proxy';
+import type { LooseDictionary } from '@fringeworks/types';
 import type { CSSProperties } from 'react';
 import extractStyleProps from '../extractStyleProps';
 import type { StyleProps, XStyleKeyMap } from '../types';

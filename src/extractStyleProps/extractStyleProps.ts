@@ -1,4 +1,4 @@
-import type { LooseDictionary } from '@niche-works/types';
+import type { LooseDictionary } from '@fringeworks/types';
 import type { CSSProperties } from 'react';
 import { DEFAULT_STYLE_KEY_MAP } from '../constants';
 import type {

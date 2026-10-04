@@ -1,4 +1,4 @@
-import type { StyleProxyOptions } from '@niche-works/react-style-proxy';
+import type { StyleProxyOptions } from '@fringeworks/react-style-proxy';
 import type {
   ExtractStylePropsOptions,
   StyleKeyMap,

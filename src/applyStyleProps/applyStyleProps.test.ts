@@ -14,7 +14,7 @@ type TestPropsBase = {
 type DefaultTestProps = TestPropsBase & StyleProps;
 
 describe('applyStyleProps', () => {
-  const onChange = (...args) => {
+  const onChange = (...args: unknown[]) => {
     console.log(args);
   };
   const create = (options?: DefaultTestProps) => {

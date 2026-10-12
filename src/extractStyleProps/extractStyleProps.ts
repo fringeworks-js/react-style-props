@@ -19,24 +19,26 @@ export default function extractStyleProps<
   M extends Record<string, keyof CSSProperties> = XStyleKeyMap,
 >(props: P, options: ExtractStylePropsOptions<M> = {}) {
   const { styleKeyMap = DEFAULT_STYLE_KEY_MAP, excludeStyleKeys } = options;
-  const rest: Omit<P, keyof StyleProps<M>> = { ...props };
-  let shouldExtract;
+  const rest: LooseDictionary = { ...props };
+  let shouldExtract: (key: string) => boolean;
   if (excludeStyleKeys) {
     const excludeKeys = new Set(excludeStyleKeys as unknown as string[]);
-    shouldExtract = (p, k) => p[k] !== undefined && !excludeKeys.has(k);
+    shouldExtract = (key) => rest[key] !== undefined && !excludeKeys.has(key);
   } else {
-    shouldExtract = (p, k) => p[k] !== undefined;
+    shouldExtract = (key) => rest[key] !== undefined;
   }
 
-  const style: CSSProperties = {};
+  const style: Record<string, unknown> = {};
   // rest配下のプロパティをstyleに移動
-  for (const xKey in styleKeyMap) {
-    if (shouldExtract(rest, xKey)) {
-      const key = styleKeyMap[xKey];
+  for (const [xKey, key] of Object.entries<string>(styleKeyMap)) {
+    if (shouldExtract(xKey)) {
       style[key] = rest[xKey];
       delete rest[xKey];
     }
   }
 
-  return { props: rest, style };
+  return {
+    props: rest as Omit<P, keyof StyleProps<M>>,
+    style: style as CSSProperties,
+  };
 }

@@ -72,7 +72,7 @@ describe('extractStyleProps', () => {
       const result = extractStyleProps({
         xOpacity: 0,
         xColor: '',
-        xBackgroundColor: null,
+        xBackgroundColor: null as any,
       });
       expect(result).toEqual({
         props: {},

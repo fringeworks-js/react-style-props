@@ -25,7 +25,7 @@ const createComponent = () => {
       </div>
     );
   };
-  return { Component, received, last: () => received[received.length - 1] };
+  return { Component, received, last: () => received[received.length - 1]! };
 };
 
 const STYLE_KEY_MAP = {

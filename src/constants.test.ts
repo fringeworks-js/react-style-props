@@ -24,7 +24,8 @@ const CATEGORY_MAPS = {
 /**
  * スタイルのキーからプロパティのキーを作る（color → xColor）
  */
-const toXKey = (key: string) => `x${key[0].toUpperCase()}${key.slice(1)}`;
+const toXKey = (key: string) =>
+  `x${key.charAt(0).toUpperCase()}${key.slice(1)}`;
 
 describe('constants', () => {
   describe.each(Object.entries(CATEGORY_MAPS))('%s', (_, map) => {

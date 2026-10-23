@@ -6,6 +6,7 @@ import withStyleProps from './withStyleProps';
 type ComponentProps = {
   children?: string;
   id?: string;
+  xBackgroundColor?: string;
   style?: CSSProperties | any;
   css?: CSSProperties | any;
   ref?: Ref<HTMLDivElement>;
@@ -101,6 +102,23 @@ describe('withStyleProps', () => {
         color: 'green',
         backgroundColor: 'blue',
       });
+    });
+
+    it('styleに指定した個別指定がスタイル関連のプロパティの省略形より優先される', () => {
+      const { Component } = createComponent();
+      const CustomComponent = withStyleProps(Component);
+      render(
+        <CustomComponent
+          xBorder="1px solid red"
+          style={{ borderColor: 'blue' }}
+        >
+          ABC
+        </CustomComponent>,
+      );
+
+      const target = screen.getByTestId('target');
+      expect(target.style.borderTopColor).toBe('blue');
+      expect(target.style.borderTopWidth).toBe('1px');
     });
   });
 
@@ -201,6 +219,52 @@ describe('withStyleProps', () => {
 
       expect(last().style).toEqual({ color: 'red' });
       expect(last()).toHaveProperty('xBackgroundColor', 'blue');
+    });
+
+    it('作成後にオプションを変更しても影響しない', () => {
+      const { Component, last } = createComponent();
+      const excludeStyleKeys: 'xBackgroundColor'[] = [];
+      const CustomComponent = withStyleProps(Component, { excludeStyleKeys });
+      excludeStyleKeys.push('xBackgroundColor');
+      render(
+        <CustomComponent xColor="red" xBackgroundColor="blue">
+          ABC
+        </CustomComponent>,
+      );
+
+      expect(last().style).toEqual({ color: 'red', backgroundColor: 'blue' });
+    });
+  });
+
+  describe('displayName', () => {
+    it('対象のコンポーネントの名前から作る', () => {
+      function Card() {
+        return null;
+      }
+      expect(withStyleProps('div').displayName).toBe('withStyleProps(div)');
+      expect(withStyleProps(Card).displayName).toBe('withStyleProps(Card)');
+    });
+
+    it('名前の無いコンポーネントはUnknownにする', () => {
+      expect(withStyleProps(() => null).displayName).toBe(
+        'withStyleProps(Unknown)',
+      );
+    });
+
+    it('オプションで指定した値を優先する', () => {
+      expect(
+        withStyleProps('div', { displayName: 'StyledDiv' }).displayName,
+      ).toBe('StyledDiv');
+    });
+
+    it('displayNameはコンポーネントへ渡さない', () => {
+      const { Component, last } = createComponent();
+      const CustomComponent = withStyleProps(Component, {
+        displayName: 'Custom',
+      });
+      render(<CustomComponent xColor="red">ABC</CustomComponent>);
+
+      expect(last()).not.toHaveProperty('displayName');
     });
   });
 });

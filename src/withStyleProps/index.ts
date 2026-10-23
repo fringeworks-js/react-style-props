@@ -1,2 +1,2 @@
 export type * from './types';
-export { default } from './withStyleProps';
+export { default, default as withStyleProps } from './withStyleProps';

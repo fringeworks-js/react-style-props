@@ -2,15 +2,22 @@ import type { PrefixedUnion } from '@fringeworks/types';
 import type { CSSProperties } from 'react';
 
 /**
- * props配下のスタイルとstyle配下のキーのマッピング
+ * スタイル関連のプロパティのキーとスタイルのキーのマッピング
+ *
+ * - 並び順にスタイルへ反映するため、省略形のキーは個別指定のキーより前に置く
  */
 export type StyleKeyMap = Record<string, keyof CSSProperties>;
 
 /**
  * スタイル関連のプロパティ
+ *
+ * - `E`に指定したキー（除外したキー）は含まない
  */
-export type StyleProps<M extends StyleKeyMap = XStyleKeyMap> = {
-  [K in keyof M]?: CSSProperties[M[K]];
+export type StyleProps<
+  M extends StyleKeyMap = XStyleKeyMap,
+  E extends keyof M = never,
+> = {
+  [K in Exclude<keyof M, E>]?: CSSProperties[M[K]];
 };
 
 /**
@@ -21,28 +28,15 @@ export type PrefixedStyleKeyMap<P extends string, U extends string> = {
 };
 
 /**
- * スタイル関連のプロパティをstyle等に移動した後のプロパティ
+ * スタイル関連のプロパティを取り除いた後のプロパティ
+ *
+ * - `E`に指定したキー（除外したキー）は取り除かずに残す
  */
-export type StyledProps<P, M extends StyleKeyMap = XStyleKeyMap> = Omit<
+export type StyledProps<
   P,
-  keyof M
->;
-
-/**
- * extractStylePropsのオプション
- */
-export type ExtractStylePropsOptions<M extends StyleKeyMap = XStyleKeyMap> = {
-  /**
-   * プロパティとスタイルのプロパティのマッピング\
-   * 未指定の場合はDEFAULT_STYLE_KEY_MAP
-   */
-  styleKeyMap?: M;
-
-  /**
-   * マッピングから除外するプロパティのキー
-   */
-  excludeStyleKeys?: NoInfer<keyof M>[];
-};
+  M extends StyleKeyMap = XStyleKeyMap,
+  E extends keyof M = never,
+> = Omit<P, keyof StyleProps<M, E>>;
 
 /**
  * デフォルトのプレフィックス
@@ -50,7 +44,7 @@ export type ExtractStylePropsOptions<M extends StyleKeyMap = XStyleKeyMap> = {
 type Prefix = 'x';
 
 /**
- * styleKeyMapのデフォルト値の装飾に関するプロパティ
+ * styleKeyMapのデフォルト値の装飾に関するマッピング
  */
 export type XDecorationStyleKeyMap = PrefixedStyleKeyMap<
   Prefix,
@@ -58,17 +52,17 @@ export type XDecorationStyleKeyMap = PrefixedStyleKeyMap<
 >;
 
 /**
- * styleKeyMapのデフォルト値の視覚効果に関するプロパティ
+ * styleKeyMapのデフォルト値の視覚効果に関するマッピング
  */
 export type XEffectStyleKeyMap = PrefixedStyleKeyMap<Prefix, EffectStyleKey>;
 
 /**
- * styleKeyMapのデフォルト値のFlexboxに関するプロパティ
+ * styleKeyMapのデフォルト値のFlexboxに関するマッピング
  */
 export type XFlexboxStyleKeyMap = PrefixedStyleKeyMap<Prefix, FlexboxStyleKey>;
 
 /**
- * styleKeyMapのデフォルト値のFlexboxの子要素に関するプロパティ
+ * styleKeyMapのデフォルト値のFlexboxの子要素に関するマッピング
  */
 export type XFlexboxItemStyleKeyMap = PrefixedStyleKeyMap<
   Prefix,
@@ -76,12 +70,12 @@ export type XFlexboxItemStyleKeyMap = PrefixedStyleKeyMap<
 >;
 
 /**
- * styleKeyMapのデフォルト値のレイアウトに関するプロパティ
+ * styleKeyMapのデフォルト値のレイアウトに関するマッピング
  */
 export type XLayoutStyleKeyMap = PrefixedStyleKeyMap<Prefix, LayoutStyleKey>;
 
 /**
- * styleKeyMapのデフォルト値の位置に関するプロパティ
+ * styleKeyMapのデフォルト値の位置に関するマッピング
  */
 export type XPositionStyleKeyMap = PrefixedStyleKeyMap<
   Prefix,
@@ -89,17 +83,17 @@ export type XPositionStyleKeyMap = PrefixedStyleKeyMap<
 >;
 
 /**
- * styleKeyMapのデフォルト値のサイズに関するプロパティ
+ * styleKeyMapのデフォルト値のサイズに関するマッピング
  */
 export type XSizeStyleKeyMap = PrefixedStyleKeyMap<Prefix, SizeStyleKey>;
 
 /**
- * styleKeyMapのデフォルト値の余白に関するプロパティ
+ * styleKeyMapのデフォルト値の余白に関するマッピング
  */
 export type XSpacingStyleKeyMap = PrefixedStyleKeyMap<Prefix, SpacingStyleKey>;
 
 /**
- * styleKeyMapのデフォルト値のプロパティ
+ * styleKeyMapのデフォルト値のマッピング
  */
 export type XStyleKeyMap = XDecorationStyleKeyMap &
   XEffectStyleKeyMap &
@@ -117,14 +111,14 @@ export type DecorationStyleKey =
   | 'background'
   | 'backgroundColor'
   | 'border'
-  | 'borderBottom'
+  | 'borderWidth'
+  | 'borderStyle'
   | 'borderColor'
+  | 'borderTop'
+  | 'borderRight'
+  | 'borderBottom'
   | 'borderLeft'
   | 'borderRadius'
-  | 'borderRight'
-  | 'borderStyle'
-  | 'borderTop'
-  | 'borderWidth'
   | 'boxShadow'
   | 'color';
 
@@ -137,48 +131,37 @@ export type EffectStyleKey = 'opacity' | 'visibility';
  * Flexboxに関するスタイルのキー
  */
 export type FlexboxStyleKey =
+  | 'alignContent'
   | 'alignItems'
   | 'flexDirection'
   | 'flexWrap'
   | 'justifyContent'
-  | 'gap';
+  | 'gap'
+  | 'rowGap'
+  | 'columnGap';
 
 /**
  * Flexboxの子要素に関するスタイルのキー
  */
 export type FlexboxItemStyleKey =
-  | 'flex'
-  | 'flexBasis'
-  | 'flexGrow'
-  | 'flexShrink';
+  'alignSelf' | 'flex' | 'flexBasis' | 'flexGrow' | 'flexShrink' | 'order';
 
 /**
  * レイアウトに関するスタイルのキー
  */
-export type LayoutStyleKey = 'display' | 'overflow';
+export type LayoutStyleKey = 'boxSizing' | 'display' | 'overflow';
 
 /**
  * 位置に関するスタイルのキー
  */
 export type PositionStyleKey =
-  | 'bottom'
-  | 'left'
-  | 'position'
-  | 'right'
-  | 'top'
-  | 'zIndex';
+  'bottom' | 'left' | 'position' | 'right' | 'top' | 'zIndex';
 
 /**
  * サイズに関するスタイルのキー
  */
 export type SizeStyleKey =
-  | 'height'
-  | 'maxHeight'
-  | 'maxWidth'
-  | 'minHeight'
-  | 'minWidth'
-  | 'width'
-  | 'boxSizing';
+  'height' | 'maxHeight' | 'maxWidth' | 'minHeight' | 'minWidth' | 'width';
 
 /**
  * 余白に関するスタイルのキー

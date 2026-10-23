@@ -14,9 +14,7 @@ type TestPropsBase = {
 type DefaultTestProps = TestPropsBase & StyleProps;
 
 describe('applyStyleProps', () => {
-  const onChange = (...args: unknown[]) => {
-    console.log(args);
-  };
+  const onChange = () => {};
   const create = (options?: DefaultTestProps) => {
     return {
       value: 'abc',
@@ -94,26 +92,6 @@ describe('applyStyleProps', () => {
         const styledProps = applyStyleProps(
           create({
             xBorderColor: '#ffffff',
-            style: {
-              borderColor: '#0000ff',
-            },
-          }),
-          { styleProp: 'style' },
-        );
-        expect(styledProps).toEqual({
-          value: 'abc',
-          onChange,
-          style: {
-            color: '#ff0000',
-            backgroundColor: '#00ff00',
-            borderColor: '#0000ff',
-          },
-        });
-      });
-
-      it('object (設定済み)', () => {
-        const styledProps = applyStyleProps(
-          create({
             style: {
               borderColor: '#0000ff',
             },
@@ -283,7 +261,7 @@ describe('applyStyleProps', () => {
     });
   });
 
-  describe('styleApplyMode', () => {
+  describe('styleMergeMode', () => {
     it('未設定', () => {
       const styledProps = applyStyleProps(
         create({
@@ -384,6 +362,25 @@ describe('applyStyleProps', () => {
           },
           { color: '#0000ff' },
         ],
+      });
+    });
+
+    it('オプションでstyleAsDefaultを指定しても上書きされない', () => {
+      const styledProps = applyStyleProps(
+        create({
+          style: {
+            color: '#0000ff',
+          },
+        }),
+        { styleAsDefault: false } as any,
+      );
+      expect(styledProps).toEqual({
+        value: 'abc',
+        onChange,
+        style: {
+          color: '#0000ff',
+          backgroundColor: '#00ff00',
+        },
       });
     });
 

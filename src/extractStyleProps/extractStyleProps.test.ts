@@ -193,5 +193,87 @@ describe('extractStyleProps', () => {
         style: { color: '#ff0000' },
       });
     });
+
+    it('読み取り専用の配列', () => {
+      const excludeStyleKeys = ['xColor'] as const;
+      const result = extractStyleProps(
+        { xColor: '#ff0000', xBackgroundColor: '#00ff00' },
+        { excludeStyleKeys },
+      );
+      expect(result).toEqual({
+        props: { xColor: '#ff0000' },
+        style: { backgroundColor: '#00ff00' },
+      });
+    });
+  });
+
+  describe('並び順', () => {
+    it('プロパティの指定順ではなく、マッピングの並び順でスタイルに反映する', () => {
+      const result = extractStyleProps({
+        xMarginTop: 4,
+        xMargin: 8,
+        xFlexGrow: 1,
+        xFlex: 'none',
+      });
+      expect(Object.keys(result.style)).toEqual([
+        'flex',
+        'flexGrow',
+        'margin',
+        'marginTop',
+      ]);
+    });
+
+    it('border系は全体、種類ごと、辺ごとの順', () => {
+      const result = extractStyleProps({
+        xBorderLeft: '1px solid red',
+        xBorderBottom: '1px solid red',
+        xBorderRight: '1px solid red',
+        xBorderTop: '1px solid red',
+        xBorderColor: 'blue',
+        xBorderStyle: 'dashed',
+        xBorderWidth: 2,
+        xBorder: '1px solid',
+      });
+      expect(Object.keys(result.style)).toEqual([
+        'border',
+        'borderWidth',
+        'borderStyle',
+        'borderColor',
+        'borderTop',
+        'borderRight',
+        'borderBottom',
+        'borderLeft',
+      ]);
+    });
+
+    it('DOMでは辺ごとの指定が種類ごとの指定より優先される', () => {
+      const { style } = extractStyleProps({
+        xBorderBottom: '1px solid red',
+        xBorderColor: 'blue',
+      });
+      const div = document.createElement('div');
+      Object.assign(div.style, style);
+      expect(div.style.borderBottomColor).toBe('red');
+      expect(div.style.borderTopColor).toBe('blue');
+    });
+  });
+
+  describe('追加したキー', () => {
+    it('Flexboxとその子要素のキー', () => {
+      const result = extractStyleProps({
+        xAlignContent: 'center',
+        xRowGap: 4,
+        xColumnGap: 8,
+        xAlignSelf: 'end',
+        xOrder: 2,
+      });
+      expect(result.style).toEqual({
+        alignContent: 'center',
+        rowGap: 4,
+        columnGap: 8,
+        alignSelf: 'end',
+        order: 2,
+      });
+    });
   });
 });

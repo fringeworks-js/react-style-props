@@ -1,28 +1,36 @@
-import type {
-  ComponentProps,
-  ComponentRef,
-  CSSProperties,
-  ElementType,
-} from 'react';
+import getComponentName from '@fringeworks/react-utils/utils/getComponentName';
+import type { ComponentRef, ElementType } from 'react';
 import { createElement, forwardRef } from 'react';
-import applyStyleProps from '../applyStyleProps';
-import type { StyleProps, XStyleKeyMap } from '../types';
-import type { StylePropsOptions } from './types';
+import { createStylePropsApplier } from '../_internal/stylePropsCore';
+import type { StyleKeyMap, XStyleKeyMap } from '../types';
+import type { StylePropsComponentProps, WithStylePropsOptions } from './types';
 
 /**
  * スタイル関連のプロパティをプロパティに指定できるコンポーネントを作成するHOC
- * @param Component
- * @param options
+ *
+ * - スタイル関連のプロパティは既定値として扱い、スタイルプロパティの指定を優先する
+ * - マッピングなどのオプションは作成時に1度だけ準備し、描画のたびには作り直さない
+ * @param Component コンポーネント
+ * @param options オプション
  * @returns
  */
 export default function withStyleProps<
   C extends ElementType,
-  M extends Record<string, keyof CSSProperties> = XStyleKeyMap,
->(Component: C, options: StylePropsOptions<M> = {}) {
-  return forwardRef<ComponentRef<C>, ComponentProps<C> & StyleProps<M>>(
-    (props, ref) => {
-      const styleizedProps = applyStyleProps(props, options);
-      return createElement(Component, { ref, ...styleizedProps });
-    },
-  );
+  M extends StyleKeyMap = XStyleKeyMap,
+  E extends keyof M = never,
+>(Component: C, options: WithStylePropsOptions<M, E> = {}) {
+  const {
+    displayName = `withStyleProps(${getComponentName(Component)})`,
+    ...applyOptions
+  } = options;
+  const applyStyleProps = createStylePropsApplier(applyOptions);
+
+  const StylePropsComponent = forwardRef<
+    ComponentRef<C>,
+    StylePropsComponentProps<C, M, E>
+  >((props, ref) => {
+    return createElement(Component, { ref, ...applyStyleProps(props) });
+  });
+  StylePropsComponent.displayName = displayName;
+  return StylePropsComponent;
 }

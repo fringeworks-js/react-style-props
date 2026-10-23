@@ -10,24 +10,29 @@ import type {
   XStyleKeyMap,
 } from './types';
 
+// 並び順にスタイルへ反映するため、省略形のキーは個別指定のキーより前に置く
+
 /**
  * 装飾に関するスタイルのキーのマッピング
+ *
+ * - border系は、全体（`border`）→ 種類ごと（`borderColor`など）→
+ *   辺ごと（`borderTop`など）の順にし、辺ごとの指定を優先する
  */
 export const DECORATION_STYLE_KEY_MAP: XDecorationStyleKeyMap = {
   xBackground: 'background',
   xBackgroundColor: 'backgroundColor',
   xBorder: 'border',
-  xBorderBottom: 'borderBottom',
+  xBorderWidth: 'borderWidth',
+  xBorderStyle: 'borderStyle',
   xBorderColor: 'borderColor',
+  xBorderTop: 'borderTop',
+  xBorderRight: 'borderRight',
+  xBorderBottom: 'borderBottom',
   xBorderLeft: 'borderLeft',
   xBorderRadius: 'borderRadius',
-  xBorderRight: 'borderRight',
-  xBorderStyle: 'borderStyle',
-  xBorderTop: 'borderTop',
-  xBorderWidth: 'borderWidth',
   xBoxShadow: 'boxShadow',
   xColor: 'color',
-} as const;
+};
 
 /**
  * 視覚効果に関するスタイルのキーのマッピング
@@ -41,33 +46,39 @@ export const EFFECT_STYLE_KEY_MAP: XEffectStyleKeyMap = {
  * Flexboxに関するスタイルのキーのマッピング
  */
 export const FLEXBOX_STYLE_KEY_MAP: XFlexboxStyleKeyMap = {
+  xAlignContent: 'alignContent',
   xAlignItems: 'alignItems',
   xFlexDirection: 'flexDirection',
   xFlexWrap: 'flexWrap',
   xJustifyContent: 'justifyContent',
   xGap: 'gap',
+  xRowGap: 'rowGap',
+  xColumnGap: 'columnGap',
 };
 
 /**
- * Flexboxの子要素に関するスタイルのキー
+ * Flexboxの子要素に関するスタイルのキーのマッピング
  */
 export const FLEXBOX_ITEM_STYLE_KEY_MAP: XFlexboxItemStyleKeyMap = {
+  xAlignSelf: 'alignSelf',
   xFlex: 'flex',
   xFlexBasis: 'flexBasis',
   xFlexGrow: 'flexGrow',
   xFlexShrink: 'flexShrink',
+  xOrder: 'order',
 };
 
 /**
- * レイアウトに関するスタイルのキー
+ * レイアウトに関するスタイルのキーのマッピング
  */
 export const LAYOUT_STYLE_KEY_MAP: XLayoutStyleKeyMap = {
+  xBoxSizing: 'boxSizing',
   xDisplay: 'display',
   xOverflow: 'overflow',
 };
 
 /**
- * 位置に関するスタイルのキー
+ * 位置に関するスタイルのキーのマッピング
  */
 export const POSITION_STYLE_KEY_MAP: XPositionStyleKeyMap = {
   xBottom: 'bottom',
@@ -79,7 +90,7 @@ export const POSITION_STYLE_KEY_MAP: XPositionStyleKeyMap = {
 };
 
 /**
- * サイズに関するスタイルのキー
+ * サイズに関するスタイルのキーのマッピング
  */
 export const SIZE_STYLE_KEY_MAP: XSizeStyleKeyMap = {
   xHeight: 'height',
@@ -88,11 +99,10 @@ export const SIZE_STYLE_KEY_MAP: XSizeStyleKeyMap = {
   xMinHeight: 'minHeight',
   xMinWidth: 'minWidth',
   xWidth: 'width',
-  xBoxSizing: 'boxSizing',
 };
 
 /**
- * 余白に関するスタイルのキー
+ * 余白に関するスタイルのキーのマッピング
  */
 export const SPACING_STYLE_KEY_MAP: XSpacingStyleKeyMap = {
   xMargin: 'margin',
@@ -107,6 +117,9 @@ export const SPACING_STYLE_KEY_MAP: XSpacingStyleKeyMap = {
   xPaddingTop: 'paddingTop',
 };
 
+/**
+ * styleKeyMapのデフォルト値（全カテゴリのマッピング）
+ */
 export const DEFAULT_STYLE_KEY_MAP: XStyleKeyMap = {
   ...DECORATION_STYLE_KEY_MAP,
   ...EFFECT_STYLE_KEY_MAP,

@@ -56,16 +56,16 @@ describe('extractStyleProps', () => {
       });
     });
 
-    it('値がundefinedのプロパティは移動しない', () => {
+    it('値がundefinedのプロパティは、スタイルに入れずにプロパティから取り除く', () => {
       const result = extractStyleProps({
         value: 'abc',
         xColor: undefined,
         xBackgroundColor: '#00ff00',
       });
       expect(result.style).toEqual({ backgroundColor: '#00ff00' });
-      // undefinedのプロパティは削除されずに残る
-      expect(result.props).toEqual({ value: 'abc', xColor: undefined });
-      expect('xColor' in result.style).toBe(false);
+      expect(result.props).toEqual({ value: 'abc' });
+      expect('xColor' in result.props).toBe(false);
+      expect('color' in result.style).toBe(false);
     });
 
     it('falsyな値(0, 空文字, null)は移動する', () => {

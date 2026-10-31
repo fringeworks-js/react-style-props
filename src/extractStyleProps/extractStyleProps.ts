@@ -15,7 +15,7 @@ import type { ExtractStylePropsOptions } from './types';
 /**
  * スタイル関連のプロパティを取り出す
  *
- * - 値が`undefined`のプロパティは取り出さずに残す
+ * - 値が`undefined`のプロパティは、スタイルには入れずにプロパティから取り除く（指定しなかったものとして扱う）
  * - 除外したプロパティ（`excludeStyleKeys`）は取り出さずに残す
  * @param props プロパティ
  * @param options オプション

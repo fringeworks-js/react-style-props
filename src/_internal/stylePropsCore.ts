@@ -51,7 +51,7 @@ export function createStyleKeyEntries(
 /**
  * マッピングの組の配列に従い、スタイル関連のプロパティをスタイルへ移動する
  *
- * - 値が`undefined`のプロパティは移動しない
+ * - 値が`undefined`のプロパティは、スタイルには移さずにプロパティから取り除く（指定しなかったものとして扱う）
  * @param props プロパティ
  * @param entries マッピングの組の配列
  * @returns
@@ -63,10 +63,13 @@ export function extractStyleByEntries(
   const rest: LooseDictionary = { ...props };
   const style: Record<string, unknown> = {};
   for (const [propKey, styleKey] of entries) {
+    if (!(propKey in rest)) {
+      continue;
+    }
     if (rest[propKey] !== undefined) {
       style[styleKey] = rest[propKey];
-      delete rest[propKey];
     }
+    delete rest[propKey];
   }
   return { props: rest, style };
 }

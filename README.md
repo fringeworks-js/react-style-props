@@ -176,7 +176,7 @@ extractStyleProps<P extends LooseDictionary & StyleProps<M, E>, M extends StyleK
 ```
 
 Returns props without the style props, together with the extracted style. `props` itself is not changed.\
-Props whose value is `undefined` are not extracted and are left as they are.
+Props whose value is `undefined` are treated as not specified: they are removed from the props without being added to the style.
 
 | Parameter  | Type                             | Description                                                         |
 | ---------- | -------------------------------- | ------------------------------------------------------------------- |

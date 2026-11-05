@@ -1,7 +1,7 @@
 import getComponentName from '@fringeworks/react-utils/utils/getComponentName';
 import type { ComponentRef, ElementType } from 'react';
 import { createElement, forwardRef } from 'react';
-import { createStylePropsApplier } from '../_internal/stylePropsCore';
+import { createStylePropsApplier } from '../_internal/_stylePropsCore';
 import type { StyleKeyMap, XStyleKeyMap } from '../types';
 import type { StylePropsComponentProps, WithStylePropsOptions } from './types';
 

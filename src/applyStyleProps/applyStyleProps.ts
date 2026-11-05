@@ -1,5 +1,5 @@
 import type { LooseDictionary } from '@fringeworks/types';
-import { createStylePropsApplier } from '../_internal/stylePropsCore';
+import { createStylePropsApplier } from '../_internal/_stylePropsCore';
 import type {
   StyledProps,
   StyleKeyMap,

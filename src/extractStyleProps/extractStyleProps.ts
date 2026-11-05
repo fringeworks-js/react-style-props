@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import {
   createStyleKeyEntries,
   extractStyleByEntries,
-} from '../_internal/stylePropsCore';
+} from '../_internal/_stylePropsCore';
 import type {
   StyledProps,
   StyleKeyMap,

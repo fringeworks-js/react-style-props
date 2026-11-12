@@ -185,18 +185,19 @@ Props whose value is `undefined` are treated as not specified: they are removed 
 
 ### Types
 
-| Type                                | Description                                                                             |
-| ----------------------------------- | --------------------------------------------------------------------------------------- |
-| `StyleKeyMap`                       | A mapping from prop names to style keys                                                 |
-| `StyleProps<M, E>`                  | The style props (excluding the excluded keys `E`)                                       |
-| `StyledProps<P, M, E>`              | `P` without the style props (the excluded keys `E` are kept)                            |
-| `StylePropsComponentProps<C, M, E>` | The props of a component created with `withStyleProps`                                  |
-| `ApplyStylePropsOptions<M, E>`      | The options of `applyStyleProps`                                                        |
-| `ExtractStylePropsOptions<M, E>`    | The options of `extractStyleProps`                                                      |
-| `WithStylePropsOptions<M, E>`       | The options of `withStyleProps`                                                         |
-| `XStyleKeyMap`                      | The type of the default mapping (also per category, such as `XDecorationStyleKeyMap`)   |
-| `StyleKey`                          | The style keys of the default mapping (also per category, such as `DecorationStyleKey`) |
-| `PrefixedStyleKeyMap<P, U>`         | A mapping from the style keys `U` prefixed with `P`                                     |
+| Type                                | Description                                                                               |
+| ----------------------------------- | ----------------------------------------------------------------------------------------- |
+| `StyleKeyMap`                       | A mapping from prop names to style keys                                                   |
+| `StyleProps<M, E>`                  | The style props (excluding the excluded keys `E`)                                         |
+| `StyledProps<P, M, E>`              | `P` without the style props (the excluded keys `E` are kept)                              |
+| `StylePropsComponentProps<C, M, E>` | The props of a component created with `withStyleProps`                                    |
+| `ApplyStylePropsOptions<M, E>`      | The options of `applyStyleProps`                                                          |
+| `ExtractStylePropsOptions<M, E>`    | The options of `extractStyleProps`                                                        |
+| `WithStylePropsOptions<M, E>`       | The options of `withStyleProps`                                                           |
+| `XStyleKeyMap`                      | The type of the default mapping (also per category, such as `XDecorationStyleKeyMap`)     |
+| `StyleKey`                          | The style keys of the default mapping (also per category, such as `DecorationStyleKey`)   |
+| `PrefixedStyleKeyMap<P, U>`         | A mapping from the style keys `U` prefixed with `P`                                       |
+| `StyleMergeMode`                    | How styles are merged (`'merge' \| 'append'`; a type of `@fringeworks/react-style-proxy`) |
 
 ## License
 

@@ -197,6 +197,7 @@ extractStyleProps<P extends LooseDictionary & StyleProps<M, E>, M extends StyleK
 | `XStyleKeyMap`                      | デフォルトのマッピングの型（カテゴリごとの `XDecorationStyleKeyMap` などもある）         |
 | `StyleKey`                          | デフォルトのマッピングのスタイルのキー（カテゴリごとの `DecorationStyleKey` などもある） |
 | `PrefixedStyleKeyMap<P, U>`         | スタイルのキー `U` にプレフィックス `P` を付けたマッピング                               |
+| `StyleMergeMode`                    | スタイルのマージ方法（`'merge' \| 'append'`。`@fringeworks/react-style-proxy` の型）     |
 
 ## ライセンス
 

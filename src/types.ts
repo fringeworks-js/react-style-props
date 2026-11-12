@@ -190,3 +190,7 @@ export type StyleKey =
   | PositionStyleKey
   | SizeStyleKey
   | SpacingStyleKey;
+
+// スタイルのマージ方法の型（`applyStyleProps` などの `styleMergeMode` オプション）。
+// 利用者が `@fringeworks/react-style-proxy` を入れずに使えるよう、ここから export する
+export type { StyleMergeMode } from '@fringeworks/react-style-proxy';
